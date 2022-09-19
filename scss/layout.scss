@@ -240,8 +240,8 @@ input {
         width: 100%;
         background: rgba(0, 0, 0, 0.6);
         input {
-          width: 100%;
-          padding: 20px 0;
+          width: calc(100% - 40px);
+          padding: 20px 20px;
         }
       }
       .inner {
