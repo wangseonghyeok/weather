@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-img">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather API</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+    <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div id="wrap">
+      <section id="slider">
+        <div class="search-wrap w380">
+          <input type="text" id="search" placeholder="Please enter in English." list="city" /><span class="search-icon"><img src="../images/search.png" alt="search" /></span>
+        </div>
+        <div class="country-city w380">
+          <a href="" data-city="New York City"><span>New York</span></a>
+          <a href="" data-city="London"><span>London</span></a>
+          <a href="" data-city="California"><span>California</span></a>
+          <a href="" data-city="Birmingham"><span>Birmingham</span></a>
+          <a href="" data-city="Japan"><span>Japan</span></a>
+        </div>
+        <div class="detail w380">
+          <h2>Weather Deatils</h2>
+          <ul class="weather-detail"></ul>
+        </div>
+      </section>
+      <section id="date"></section>
+      <section id="temperature"></section>
+    </div>
+    <script>
+      //a태그를 눌렀을떄 ajax {} 도시명이 바뀐다.
+      //search 태그를 입력했을때 ajax {}명이 바뀐다.
+      const weathers = function (location) {
+        $.ajax({
+          url: `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=225c7aa7308675d370d404e4cb876f8e&units=metric`,
+        }).done(function (data) {
+          const sensible = $(".weather-detail");
+          const temperature = $("#temperature");
+          const search_icon = $(".search-icon");
+          const date = $("#date");
+          const temp = Math.floor(data.main.temp) + "°C"; //타이틀 온도
+          const icon = data.weather[0].icon.substr(0, 2); //아이콘
+          const temp_max = Math.floor(data.main.temp_max); //최고온도
+          const temp_min = Math.floor(data.main.temp_min); //최저온도
+          const humidity = data.main.humidity; //습기
+          const wind = data.wind.speed; //바람
+          const cloudy = data.clouds.all; //구름
+          let weather_icon = {
+            "01": "fa-solid fa-sun",
+            "02": "fa-solid fa-cloud-sun",
+            "03": "fa-solid fa-cloud",
+            "04": "fa-solid fa-cloud-meatball",
+            "09": "fa-solid fa-cloud-sun-rain",
+            10: "fa-solid fa-cloud-showers-heavy",
+            11: "fa-solid fa-poo-storm",
+            13: "fa-solid fa-snowflake",
+            50: "fa-solid fa-smog",
+          };
+          let weather_img = {
+            "01": "weather-sun",
+            "02": "weather-clouds-sun",
+            "03": "weather-clouds",
+            "04": "weather-meatball",
+            "09": "weather-sun-rain",
+            10: "weater-rain ",
+            11: "weather-thunderstrom",
+            13: "weater-snow",
+            50: "weater-smoke",
+          };
+
+          search_icon.on("click", function () {
+            const input = search.val();
+            weathers(input);
+          });
+
+          const search = $("#search"); //검 색
+          search.on("keydown", function (e) {
+            if (e.keyCode == 13) {
+              const input = search.val();
+              weathers(input);
+            }
+          });
+
+          let tempHtml = "";
+          let titleHtml = "";
+          let timeHtml = "";
+          tempHtml += `<li>Max/Min Temp</li>
+            <li class="txt-r ">${temp_max}°C / ${temp_min} °C</li>
+            <li>Humidity</li>
+            <li class="txt-r">${humidity} %</li>
+            <li>Wind</li>
+            <li class="txt-r">${wind}kmC/h</li>
+            <li>Cloudy</li>
+            <li class="txt-r">${cloudy}%</li>`;
+
+          titleHtml += `
+            <span class="ctemp">${temp}</span>
+            <span class="city">${data.name}</span>
+            <span class="icon"><i class="${weather_icon[icon]}"></i></span>
+            `;
+
+          let now = new Date();
+          now = moment().format("dddd Do MM YYYY");
+
+          timeHtml = `<span class="time">${now}</span>`;
+          $("html").removeClass();
+          $("html").addClass(weather_img[icon]);
+          sensible.html(tempHtml);
+          temperature.html(titleHtml);
+          date.html(timeHtml);
+        });
+      };
+      weathers("Seoul");
+      $(".country-city a").each(function (idx, item) {
+        $(item).on("click", function (e) {
+          e.preventDefault();
+          const newcity = $(item).data("city");
+          weathers(newcity);
+        });
+      });
+    </script>
+  </body>
+</html>
