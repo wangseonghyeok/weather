@@ -20,6 +20,7 @@ OpenWeather API 이용해 날씨 App
 * 도시검색을 일일이 넣기 번거러워 아래 주요 도시명을 추가하였다 a태그에 data속성을 추가
 
 *클릭이벤트를 넣어 각 데이터를 넣어준다.
+
  ```C
   $(".country-city a").each(function (idx, item) {
         $(item).on("click", function (e) {
@@ -34,6 +35,7 @@ OpenWeather API 이용해 날씨 App
 ![1](https://user-images.githubusercontent.com/102776957/190941613-ca28bded-d4a4-4420-8e9c-f9514aaaefc5.JPG)
 
 *키보드로 입력받기
+
 ```C
 search.addEventListener('keydown', function(e){
     if(e.keyCode === 13) {
