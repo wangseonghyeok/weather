@@ -32,6 +32,7 @@ OpenWeather API 이용해 날씨 App
 ```
 
 * 날씨에 따라 아이콘,배경 변경하기 json 서버에서 주는 데이터를 가져와 번호에 맞게 데이터를 뿌려줬다. (데이타 중간 중간에 번호가없다)
+
 ![1](https://user-images.githubusercontent.com/102776957/190941613-ca28bded-d4a4-4420-8e9c-f9514aaaefc5.JPG)
 
 * 키보드로 입력받기
